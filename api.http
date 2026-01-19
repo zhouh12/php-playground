@@ -1,0 +1,12 @@
+@baseUrl = http://localhost:8000
+
+
+GET {{baseUrl}}/api/orders
+
+### Process payment for an order
+POST {{baseUrl}}/api/orders/1/pay
+Content-Type: application/json
+
+{
+  "orderId": "1"
+}

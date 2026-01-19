@@ -1,0 +1,47 @@
+{
+    "name": "interview/payment-api",
+    "description": "PHP 8.5 Payment API for Interview Practice - Clean Architecture",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "php": "^8.5"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^2.1",
+        "phpunit/phpunit": "^11.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Bootstrap\\": "bootstrap/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "test:unit": "phpunit --testsuite=Unit",
+        "test:feature": "phpunit --testsuite=Feature",
+        "lint": "find app bootstrap tests -name '*.php' -exec php -l {} \\;",
+        "phpstan": "phpstan analyse app bootstrap --level=5",
+        "phpstan:strict": "phpstan analyse app bootstrap --level=9",
+        "check": [
+            "@composer validate",
+            "@lint",
+            "@phpstan",
+            "@test"
+        ],
+        "build": [
+            "@composer validate",
+            "@lint",
+            "@phpstan",
+            "composer dump-autoload"
+        ]
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

@@ -1,0 +1,16 @@
+Building new APIs preferably using API spec
+
+Exercise interview:
+provided an existing API solution (no HTML) with a PHP class and asked to:
+Review the class and modernise the implementation.
+Make the class more testable.
+Extend the class with additional functionality.
+Write tests for the improved class using PHPUnit. (already installed)
+The exercise involves running the code and tests from the command line.
+ Note: The project they provided was already set up for PHP 8.5, so make sure your local environment can work with 8.5.
+
+ Key Technical Notes:
+Focus on OOP, code structure, and creating testable classes.
+Important to handle functions that echo output, as this affects how tests must be written.
+PHPUnit was already provided and configured in the solution.
+All work was done locally.
