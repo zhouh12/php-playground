@@ -9,6 +9,7 @@ use App\Application\Contracts\PaymentGatewayInterface;
 use App\Application\Services\PaymentService;
 use App\Domain\Contracts\OrderRepositoryInterface;
 use App\Domain\Contracts\PaymentRepositoryInterface;
+use App\Http\Controllers\ApiDocsController;
 use App\Http\Controllers\OrderController;
 use App\Http\Router;
 use App\Infrastructure\Container\Container;
@@ -109,6 +110,7 @@ final class Application
     private function registerRoutes(): void
     {
         $orderController = $this->container->make(OrderController::class);
+        $apiDocsController = new ApiDocsController();
 
         // Root route - API information
         $this->router->get('/', function ($request, $params) {
@@ -116,6 +118,11 @@ final class Application
                 'name' => 'Payment API',
                 'version' => '1.0.0',
                 'description' => 'PHP 8.5 Payment API - Clean Architecture',
+                'documentation' => [
+                    'swagger_ui' => '/swagger',
+                    'openapi_json' => '/api-docs.json',
+                    'openapi_yaml' => '/api-docs.yaml',
+                ],
                 'endpoints' => [
                     'GET /api/orders' => 'List all orders',
                     'GET /api/orders/{orderId}' => 'Get order details',
@@ -124,6 +131,14 @@ final class Application
             ]);
         });
 
+        // API Documentation routes (C# style: /swagger/index.html)
+        $this->router->get('/swagger', $apiDocsController->ui(...));
+        $this->router->get('/swagger/index.html', $apiDocsController->ui(...));
+        $this->router->get('/api-docs', $apiDocsController->spec(...));
+        $this->router->get('/api-docs.json', $apiDocsController->json(...));
+        $this->router->get('/api-docs.yaml', $apiDocsController->yaml(...));
+
+        // API routes
         $this->router->get('/api/orders', $orderController->index(...));
         $this->router->get('/api/orders/{orderId}', $orderController->show(...));
         $this->router->post('/api/orders/{orderId}/pay', $orderController->pay(...));

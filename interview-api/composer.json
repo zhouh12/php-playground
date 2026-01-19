@@ -4,7 +4,8 @@
     "type": "project",
     "license": "MIT",
     "require": {
-        "php": "^8.5"
+        "php": "^8.5",
+        "zircote/swagger-php": "^6.0"
     },
     "require-dev": {
         "phpstan/phpstan": "^2.1",
@@ -26,7 +27,7 @@
         "test:unit": "phpunit --testsuite=Unit",
         "test:feature": "phpunit --testsuite=Feature",
         "lint": "find app bootstrap tests -name '*.php' -exec php -l {} \\;",
-        "phpstan": "phpstan analyse app bootstrap --level=5",
+        "phpstan": "phpstan analyse app bootstrap --level=5 --memory-limit=256M",
         "phpstan:strict": "phpstan analyse app bootstrap --level=9",
         "check": [
             "@composer validate",
