@@ -4,20 +4,19 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
-use App\Domain\Enums\PaymentStatus;
-use App\Domain\Models\Payment;
 use DateTimeImmutable;
 use InvalidArgumentException;
+use App\Domain\Models\Payment;
 use PHPUnit\Framework\TestCase;
+use App\Domain\Enums\PaymentStatus;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Unit tests for the Payment model.
  */
 final class PaymentModelTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_creates_successful_payment(): void
     {
         $payment = Payment::successful(
@@ -34,9 +33,7 @@ final class PaymentModelTest extends TestCase
         $this->assertNull($payment->failureReason);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_creates_failed_payment(): void
     {
         $payment = Payment::failed(
@@ -54,9 +51,7 @@ final class PaymentModelTest extends TestCase
         $this->assertSame('Card declined', $payment->failureReason);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_exception_for_non_positive_amount(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -73,9 +68,7 @@ final class PaymentModelTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_serializes_to_array(): void
     {
         $createdAt = new DateTimeImmutable('2024-01-15 11:00:00');
@@ -103,9 +96,7 @@ final class PaymentModelTest extends TestCase
         $this->assertNull($array['failure_reason']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_includes_failure_reason_in_array_when_present(): void
     {
         $payment = Payment::failed(

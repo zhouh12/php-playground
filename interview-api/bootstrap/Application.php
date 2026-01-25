@@ -6,11 +6,14 @@ namespace Bootstrap;
 
 use App\Application\Contracts\IdGeneratorInterface;
 use App\Application\Contracts\PaymentGatewayInterface;
+use App\Application\Services\IUserService;
 use App\Application\Services\PaymentService;
+use App\Application\Services\UserService;
 use App\Domain\Contracts\OrderRepositoryInterface;
 use App\Domain\Contracts\PaymentRepositoryInterface;
 use App\Http\Controllers\ApiDocsController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\UserController;
 use App\Http\Router;
 use App\Infrastructure\Container\Container;
 use App\Infrastructure\Database\Connection;
@@ -97,6 +100,12 @@ final class Application
             )
         );
 
+        $this->container->singleton(
+            IUserService::class,
+            fn() => new UserService()
+        );
+
+
         // Http Controllers
         $this->container->singleton(
             OrderController::class,
@@ -105,11 +114,19 @@ final class Application
                 $c->make(OrderRepositoryInterface::class),
             )
         );
+
+        $this->container->singleton(
+            UserController::class,
+            fn(Container $c) => new UserController(
+                $c->make(IUserService::class)            
+            )   
+        );
     }
 
     private function registerRoutes(): void
     {
         $orderController = $this->container->make(OrderController::class);
+        $userController = $this->container->make(UserController::class);
         $apiDocsController = new ApiDocsController();
 
         // Root route - API information
@@ -142,5 +159,6 @@ final class Application
         $this->router->get('/api/orders', $orderController->index(...));
         $this->router->get('/api/orders/{orderId}', $orderController->show(...));
         $this->router->post('/api/orders/{orderId}/pay', $orderController->pay(...));
+        $this->router->get('/api/users/{userId}', $userController->user(...));
     }
 }

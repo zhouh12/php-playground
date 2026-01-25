@@ -4,20 +4,19 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
-use App\Domain\Enums\OrderStatus;
-use App\Domain\Models\Order;
 use DateTimeImmutable;
+use App\Domain\Models\Order;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use App\Domain\Enums\OrderStatus;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * Unit tests for the Order model.
  */
 final class OrderModelTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_creates_order_with_default_pending_status(): void
     {
         $order = new Order(
@@ -31,9 +30,7 @@ final class OrderModelTest extends TestCase
         $this->assertNull($order->getPaidAt());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_exception_for_non_positive_amount(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -47,9 +44,7 @@ final class OrderModelTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_exception_for_negative_amount(): void
     {
         $this->expectException(InvalidArgumentException::class);
@@ -62,9 +57,7 @@ final class OrderModelTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_be_marked_as_paid(): void
     {
         $order = new Order(
@@ -81,9 +74,7 @@ final class OrderModelTest extends TestCase
         $this->assertSame($paidAt, $order->getPaidAt());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_cannot_be_paid_twice(): void
     {
         $order = new Order(
@@ -101,9 +92,7 @@ final class OrderModelTest extends TestCase
         $order->markAsPaid();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_cannot_be_paid_when_cancelled(): void
     {
         $order = new Order(
@@ -121,9 +110,7 @@ final class OrderModelTest extends TestCase
         $order->markAsPaid();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_be_cancelled_when_pending(): void
     {
         $order = new Order(
@@ -138,9 +125,7 @@ final class OrderModelTest extends TestCase
         $this->assertSame(OrderStatus::Cancelled, $order->getStatus());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_cannot_be_cancelled_when_paid(): void
     {
         $order = new Order(
@@ -158,9 +143,7 @@ final class OrderModelTest extends TestCase
         $order->cancel();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_can_be_refunded_when_paid(): void
     {
         $order = new Order(
@@ -176,9 +159,7 @@ final class OrderModelTest extends TestCase
         $this->assertSame(OrderStatus::Refunded, $order->getStatus());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_cannot_be_refunded_when_pending(): void
     {
         $order = new Order(
@@ -194,9 +175,7 @@ final class OrderModelTest extends TestCase
         $order->markAsRefunded();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_serializes_to_array(): void
     {
         $createdAt = new DateTimeImmutable('2024-01-15 09:00:00');

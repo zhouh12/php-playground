@@ -4,20 +4,21 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
-use App\Application\Contracts\IdGeneratorInterface;
-use App\Application\Contracts\PaymentGatewayInterface;
-use App\Application\Contracts\PaymentResultInterface;
-use App\Application\Services\PaymentService;
-use App\Domain\Contracts\OrderRepositoryInterface;
-use App\Domain\Contracts\PaymentRepositoryInterface;
-use App\Domain\Enums\OrderStatus;
-use App\Domain\Enums\PaymentStatus;
-use App\Domain\Exceptions\OrderNotFoundException;
-use App\Domain\Exceptions\PaymentException;
 use App\Domain\Models\Order;
 use App\Domain\Models\Payment;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use App\Domain\Enums\OrderStatus;
+use App\Domain\Enums\PaymentStatus;
+use PHPUnit\Framework\Attributes\Test;
+use App\Domain\Exceptions\PaymentException;
+use App\Application\Services\PaymentService;
+use PHPUnit\Framework\MockObject\MockObject;
+use App\Domain\Exceptions\OrderNotFoundException;
+use App\Domain\Contracts\OrderRepositoryInterface;
+use App\Application\Contracts\IdGeneratorInterface;
+use App\Domain\Contracts\PaymentRepositoryInterface;
+use App\Application\Contracts\PaymentResultInterface;
+use App\Application\Contracts\PaymentGatewayInterface;
 
 /**
  * Unit tests for the PaymentService.
@@ -49,9 +50,7 @@ final class PaymentServiceTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_exception_when_order_not_found(): void
     {
         // Arrange
@@ -68,9 +67,7 @@ final class PaymentServiceTest extends TestCase
         $this->paymentService->processPayment('non-existent');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_exception_when_order_already_paid(): void
     {
         // Arrange
@@ -89,9 +86,7 @@ final class PaymentServiceTest extends TestCase
         $this->paymentService->processPayment('order-123');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_exception_when_order_is_cancelled(): void
     {
         // Arrange
@@ -116,9 +111,7 @@ final class PaymentServiceTest extends TestCase
         $this->paymentService->processPayment('order-cancelled');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_exception_when_currency_not_supported(): void
     {
         // Arrange
@@ -150,9 +143,7 @@ final class PaymentServiceTest extends TestCase
         $this->paymentService->processPayment('order-xyz');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_processes_payment_successfully(): void
     {
         // Arrange
@@ -224,9 +215,7 @@ final class PaymentServiceTest extends TestCase
         $this->assertSame('payment-uuid-123', $response->payment['id']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_exception_when_gateway_fails(): void
     {
         // Arrange
@@ -284,9 +273,7 @@ final class PaymentServiceTest extends TestCase
         $this->paymentService->processPayment('order-fail');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_calls_dependencies_in_correct_order(): void
     {
         // This test verifies the orchestration flow

@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
-use App\Domain\Contracts\OrderRepositoryInterface;
-use App\Domain\Contracts\PaymentRepositoryInterface;
+use Tests\TestCase;
+use App\Http\Request;
 use App\Domain\Enums\OrderStatus;
 use App\Domain\Enums\PaymentStatus;
-use App\Http\Request;
-use Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
+use App\Domain\Contracts\OrderRepositoryInterface;
+use App\Domain\Contracts\PaymentRepositoryInterface;
 
 /**
  * Feature tests for the payment endpoint.
@@ -19,9 +20,7 @@ use Tests\TestCase;
  */
 final class PaymentEndpointTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function it_successfully_processes_payment_for_pending_order(): void
     {
         // Arrange
@@ -56,9 +55,7 @@ final class PaymentEndpointTest extends TestCase
         $this->assertStringStartsWith('ch_', $response->data['payment']['gateway_transaction_id']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_returns_404_for_non_existent_order(): void
     {
         // Act
@@ -74,9 +71,7 @@ final class PaymentEndpointTest extends TestCase
         $this->assertStringContainsString('not found', $response->data['error']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_returns_422_when_order_is_already_paid(): void
     {
         // Arrange
@@ -100,9 +95,7 @@ final class PaymentEndpointTest extends TestCase
         $this->assertStringContainsString('already been paid', $response->data['error']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_returns_422_when_order_is_cancelled(): void
     {
         // Arrange
@@ -121,9 +114,7 @@ final class PaymentEndpointTest extends TestCase
         $this->assertStringContainsString('cannot be paid', $response->data['error']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_persists_the_order_status_after_payment(): void
     {
         // Arrange
@@ -145,9 +136,7 @@ final class PaymentEndpointTest extends TestCase
         $this->assertNotNull($updatedOrder->getPaidAt());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_persists_payment_record_after_successful_payment(): void
     {
         // Arrange
@@ -174,9 +163,7 @@ final class PaymentEndpointTest extends TestCase
         $this->assertSame('stripe', $payment->gatewayName);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_returns_correct_json_structure_on_success(): void
     {
         // Arrange
@@ -217,9 +204,7 @@ final class PaymentEndpointTest extends TestCase
         $this->assertArrayHasKey('created_at', $data['payment']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function get_order_endpoint_returns_order_details(): void
     {
         // Arrange
@@ -246,9 +231,7 @@ final class PaymentEndpointTest extends TestCase
         $this->assertSame('pending', $response->data['order']['status']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function list_orders_endpoint_returns_all_orders(): void
     {
         // Arrange
@@ -269,9 +252,7 @@ final class PaymentEndpointTest extends TestCase
         $this->assertCount(3, $response->data['orders']);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_returns_405_for_unsupported_methods(): void
     {
         // Act
@@ -285,9 +266,7 @@ final class PaymentEndpointTest extends TestCase
         $this->assertSame(405, $response->statusCode);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_returns_404_for_unknown_routes(): void
     {
         // Act
