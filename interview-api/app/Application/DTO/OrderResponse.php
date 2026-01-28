@@ -12,7 +12,6 @@ final class OrderResponse
         public float $originalAmount,
         public int $discount,
         public float $finalAmount,
-        public ?string $error){
-            
-        }
+        public ?string $error
+        ){}
 }
