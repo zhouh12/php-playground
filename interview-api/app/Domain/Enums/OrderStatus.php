@@ -10,6 +10,10 @@ enum OrderStatus: string
     case Paid = 'paid';
     case Cancelled = 'cancelled';
     case Refunded = 'refunded';
+    case Processed = 'processed';
+    case NotFound = 'not_found';
+    case AlreadyPaid = 'already_paid';
+    case Error = 'error';
 
     public function isPaid(): bool
     {
